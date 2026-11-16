@@ -6,6 +6,40 @@ import java.time.format.DateTimeParseException;
 void main() {
   IO.println("Hej og velkommen til svømmehallen");
 
+
+  LoginSystem loginSystem = new LoginSystem();
+
+// Testbrugere
+  loginSystem.addUser(new User(1, "formand", "1234", Role.FORMAND));
+  loginSystem.addUser(new User(2, "kasserer", "1234", Role.KASSERER));
+  loginSystem.addUser(new User(3, "træner", "1234", Role.TRÆNER));
+
+  User loggedIn = null;
+
+  while (loggedIn == null) {
+
+    IO.println("");
+    IO.println("===== DELFINEN LOGIN =====");
+
+    IO.print("Brugernavn: ");
+    String username = IO.readln();
+
+    IO.print("Adgangskode: ");
+    String password = IO.readln();
+
+    loggedIn = loginSystem.login(username, password);
+
+    if (loggedIn == null) {
+      IO.println("Forkert brugernavn eller adgangskode!");
+      IO.println("Prøv igen.");
+    }
+  }
+
+  IO.println("");
+  IO.println("Velkommen, " + loggedIn.getUsername());
+  IO.println("Din rolle: " + loggedIn.getRole());
+
+
   MemberFile memberFile = new MemberFile();
   ArrayList<Member> medlemmer = memberFile.loadMembers();
 
