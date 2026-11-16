@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -11,15 +12,32 @@ public class Member {
 
     static int nextMemberNumber = 1;
 
-    public Member(String name, LocalDate birthDate, String aktivitet) {
+    // Opretter et nyt medlem
+    public Member(String name, LocalDate birthDate, String aktivitet, String svømmetype) {
         this.memberNumber = nextMemberNumber;
         nextMemberNumber++;
+
         this.name = name;
         this.birthDate = birthDate;
         this.aktivitet = aktivitet;
-}
+        this.svømmetype = svømmetype;
+    }
 
-public int getMemberNumber() {
+    // Indlæser et eksisterende medlem
+    public Member(int memberNumber, String name, LocalDate birthDate, String aktivitet, String svømmetype) {
+        this.memberNumber = memberNumber;
+
+        if (memberNumber >= nextMemberNumber) {
+            nextMemberNumber = memberNumber + 1;
+        }
+
+        this.name = name;
+        this.birthDate = birthDate;
+        this.aktivitet = aktivitet;
+        this.svømmetype = svømmetype;
+    }
+
+    public int getMemberNumber() {
         return memberNumber;
     }
 
@@ -45,5 +63,9 @@ public int getMemberNumber() {
 
     public String getAktivitet() {
         return aktivitet;
+    }
+
+    public String getSvømmetype() {
+        return svømmetype;
     }
 }
