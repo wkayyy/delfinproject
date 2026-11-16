@@ -116,6 +116,7 @@ void main() {
         }
 
         IO.println("-------------------------");
+
       }
 
     } else if (valg.equals("0")) {
