@@ -8,6 +8,7 @@ public class Member {
     String name;
     LocalDate birthDate;
     String aktivitet;
+    boolean kontingentBetalt = false;
     String svømmetype;
 
     static int nextMemberNumber = 1;
@@ -67,5 +68,12 @@ public class Member {
 
     public String getSvømmetype() {
         return svømmetype;
+    }
+    public boolean isKontingentBetalt() {
+        return kontingentBetalt;
+    }
+
+    public void setKontingentBetalt(boolean kontingentBetalt) {
+        this.kontingentBetalt = kontingentBetalt;
     }
 }

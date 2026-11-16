@@ -51,8 +51,186 @@ public class ConsoleUI {
         IO.println("Velkommen, " + loggedIn.getUsername());
         IO.println("Din rolle: " + loggedIn.getRole());
 
-        menu();
+        visRolleMenu(loggedIn);
 
+    }
+
+    public void visRolleMenu(User user) {
+
+        if (user.getRole() == Role.FORMAND) {
+            formandMenu();
+
+        } else if (user.getRole() == Role.KASSERER) {
+            kassererMenu();
+
+        } else if (user.getRole() == Role.TRÆNER) {
+            traenerMenu();
+        }
+    }
+
+    public void formandMenu() {
+
+        String valg = "";
+
+        while (!valg.equals("0")) {
+
+            IO.println("");
+            IO.println("===== FORMANDENS MENU =====");
+            IO.println("1. Opret medlem");
+            IO.println("2. Vis alle medlemmer");
+            IO.println("3. Se forventet kontingentindtægt");
+            IO.println("0. Afslut");
+            IO.print("Vælg: ");
+
+            valg = IO.readln();
+
+            if (valg.equals("1")) {
+                opretMedlem();
+
+            } else if (valg.equals("2")) {
+                visMedlemmer();
+
+            } else if (valg.equals("3")) {
+                visForventetIndtaegt();
+
+            } else if (!valg.equals("0")) {
+                IO.println("Ugyldigt valg!");
+            }
+        }
+    }
+
+    public void kassererMenu() {
+
+        String valg = "";
+
+        while (!valg.equals("0")) {
+
+            IO.println("");
+            IO.println("===== KASSERERENS MENU =====");
+            IO.println("1. Vis alle medlemmer");
+            IO.println("2. Se forventet kontingentindtægt");
+            IO.println("3. Se medlemmer med gæld");
+            IO.println("4. Registrer betaling");
+            IO.println("0. Afslut");
+            IO.print("Vælg: ");
+
+            valg = IO.readln();
+
+            if (valg.equals("1")) {
+                visMedlemmer();
+
+            } else if (valg.equals("2")) {
+                visForventetIndtaegt();
+
+            } else if (valg.equals("3")) {
+                visRestancer();
+
+            } else if (valg.equals("4")) {
+                registrerBetaling();
+
+            } else if (!valg.equals("0")) {
+                IO.println("Ugyldigt valg!");
+            }
+        }
+    }
+    public void traenerMenu() {
+
+        String valg = "";
+
+        while (!valg.equals("0")) {
+
+            IO.println("");
+            IO.println("===== TRÆNERENS MENU =====");
+            IO.println("1. Se mine hold");
+            IO.println("0. Afslut");
+            IO.print("Vælg: ");
+
+            valg = IO.readln();
+
+            if (valg.equals("1")) {
+                IO.println("Holdoversigten bliver snart tilføjet.");
+
+            } else if (!valg.equals("0")) {
+                IO.println("Ugyldigt valg!");
+            }
+        }
+    }
+
+    public void visRestancer() {
+
+        IO.println("");
+        IO.println("===== MEDLEMMER MED RESTANCER =====");
+
+        boolean fundet = false;
+
+        for (Member medlem : medlemmer) {
+
+            if (!medlem.isKontingentBetalt()) {
+
+                int fee = membershipFee.calculateFee(medlem);
+
+                IO.println("-------------------------");
+                IO.println("Medlemsnummer: " + medlem.getMemberNumber());
+                IO.println("Navn: " + medlem.getName());
+                IO.println("Skylder: " + fee + " kr.");
+
+                fundet = true;
+            }
+        }
+
+        if (!fundet) {
+            IO.println("Ingen medlemmer har udestående kontingent.");
+        }
+    }
+
+    public void registrerBetaling() {
+
+        IO.println("");
+        IO.println("===== REGISTRER BETALING =====");
+
+        IO.print("Indtast medlemsnummer: ");
+        int medlemsnummer = Integer.parseInt(IO.readln());
+
+        boolean fundet = false;
+
+        for (Member medlem : medlemmer) {
+
+            if (medlem.getMemberNumber() == medlemsnummer) {
+
+                fundet = true;
+
+                if (medlem.isKontingentBetalt()) {
+                    IO.println("Medlemmet har allerede betalt.");
+                } else {
+                    medlem.setKontingentBetalt(true);
+                    memberFile.saveMembers(medlemmer);
+
+                    IO.println("Betaling registreret!");
+                    IO.println(medlem.getName() + " er nu registreret som betalt.");
+                }
+            }
+        }
+
+        if (!fundet) {
+            IO.println("Medlemsnummeret findes ikke.");
+        }
+    }
+
+    public void visForventetIndtaegt() {
+
+        int samletIndtaegt = 0;
+
+        for (Member medlem : medlemmer) {
+
+            int fee = membershipFee.calculateFee(medlem);
+
+            samletIndtaegt = samletIndtaegt + fee;
+        }
+
+        IO.println("");
+        IO.println("===== FORVENTET KONTINGENT =====");
+        IO.println("Antal medlemmer: " + medlemmer.size());
+        IO.println("Forventet indtægt: " + samletIndtaegt + " kr.");
     }
 
     public void menu() {
