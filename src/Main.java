@@ -9,6 +9,11 @@ void main() {
   MemberFile memberFile = new MemberFile();
   ArrayList<Member> medlemmer = memberFile.loadMembers();
 
+  MembershipFee membershipFee = new MembershipFee();
+  int fee = membershipFee.calculateFee(medlem1);
+  IO.println("Årligt kontingent: " + fee + " kr.");
+
+
   IO.println("");
   IO.println("===== DELFINEN =====");
   IO.println("Medlemsregister indlæst.");
