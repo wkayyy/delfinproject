@@ -1,13 +1,46 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-  //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-  // to see how IntelliJ IDEA suggests fixing it.
-  IO.println(String.format("Hello and welcome!"));
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
-  for (int i = 1; i <= 5; i++) {
-    //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-    // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-    IO.println("i = " + i);
+void main() {
+  IO.println("Hej og velkommen til svømmehallen");
+
+  ArrayList<Member> medlemmer = new ArrayList<>();
+
+  String svar = "ja";
+
+  while (svar.equals("ja")) {
+
+    IO.print("Indtast navn: ");
+    String name = IO.readln();
+
+    LocalDate birthDate = null;
+
+    try {
+      IO.print("Indtast fødselsdato (ÅÅÅÅ-MM-DD): ");
+      birthDate = LocalDate.parse(IO.readln());
+    } catch (DateTimeParseException e) {
+      IO.println("Ugyldig fødselsdato!");
+      continue;
+    }
+
+    IO.println("Vælg aktivitetsform:");
+    IO.println("1. Aktiv");
+    IO.println("2. Passiv");
+
+    IO.print("Vælg: ");
+    String aktivitet = IO.readln();
+
+    if (aktivitet.equals("1")) {
+      aktivitet = "Aktiv";
+    } else if (aktivitet.equals("2")) {
+      aktivitet = "Passiv";
+    }
+
+    Member medlem1 = new Member(name, birthDate, aktivitet);
+    medlemmer.add(medlem1);
+
+  IO.print("Vil du oprette et nyt medlem? (ja/nej): ");
+  svar = IO.readln().toLowerCase();
   }
 }
