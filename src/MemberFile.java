@@ -19,7 +19,8 @@ public class MemberFile {
                                 medlem.getName() + ";" +
                                 medlem.getBirthDate() + ";" +
                                 medlem.getAktivitet() + ";" +
-                                medlem.getSvømmetype() + "\n"
+                                medlem.getSvømmetype() + ";" +
+                                medlem.isKontingentBetalt() + "\n"
                 );
             }
 
@@ -59,7 +60,15 @@ public class MemberFile {
                 String aktivitet = oplysninger[3];
                 String svømmetype = oplysninger[4];
 
+                boolean kontingentBetalt = false;
+
+                if (oplysninger.length > 5) {
+                    kontingentBetalt = Boolean.parseBoolean(oplysninger[5]);
+                }
+
                 Member medlem = new Member(memberNumber, name, birthDate, aktivitet, svømmetype);
+
+                medlem.setKontingentBetalt(kontingentBetalt);
 
                 medlemmer.add(medlem);
             }
