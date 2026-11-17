@@ -478,6 +478,8 @@ public class ConsoleUI {
                 IO.println("-------------------------");
                 IO.println("Medlemsnummer: " + medlem.getMemberNumber());
                 IO.println("Navn: " + medlem.getName());
+                IO.println("Medlem siden: " + medlem.getIndmeldelsesdato());
+                IO.println("Medlemsanciennitet: " + medlem.getMedlemsAar() + " år");
                 IO.println("Fødselsdato: " + medlem.getBirthDate());
                 IO.println("Alder: " + medlem.getAge());
                 IO.println("Aldersgruppe: " + medlem.getAgeGroup());

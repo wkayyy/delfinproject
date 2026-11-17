@@ -10,6 +10,7 @@ public class Member {
     String aktivitet;
     boolean kontingentBetalt = false;
     String svømmetype;
+    LocalDate indmeldelsesdato;
 
     static int nextMemberNumber = 1;
 
@@ -22,6 +23,7 @@ public class Member {
         this.birthDate = birthDate;
         this.aktivitet = aktivitet;
         this.svømmetype = svømmetype;
+        this.indmeldelsesdato = LocalDate.now();
     }
 
     // Indlæser et eksisterende medlem
@@ -91,5 +93,17 @@ public class Member {
 
     public void setSvømmetype(String svømmetype) {
         this.svømmetype = svømmetype;
+    }
+
+    public LocalDate getIndmeldelsesdato() {
+        return indmeldelsesdato;
+    }
+
+    public void setIndmeldelsesdato(LocalDate indmeldelsesdato) {
+        this.indmeldelsesdato = indmeldelsesdato;
+    }
+
+    public int getMedlemsAar() {
+        return Period.between(indmeldelsesdato, LocalDate.now()).getYears();
     }
 }
