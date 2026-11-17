@@ -20,7 +20,8 @@ public class MemberFile {
                                 medlem.getBirthDate() + ";" +
                                 medlem.getAktivitet() + ";" +
                                 medlem.getSvømmetype() + ";" +
-                                medlem.isKontingentBetalt() + "\n"
+                                medlem.isKontingentBetalt() + ";" +
+                                medlem.getIndmeldelsesdato() + "\n"
                 );
             }
 
@@ -59,16 +60,16 @@ public class MemberFile {
                 LocalDate birthDate = LocalDate.parse(oplysninger[2]);
                 String aktivitet = oplysninger[3];
                 String svømmetype = oplysninger[4];
+                LocalDate indmeldelsesdato = LocalDate.now();
 
-                boolean kontingentBetalt = false;
-
-                if (oplysninger.length > 5) {
-                    kontingentBetalt = Boolean.parseBoolean(oplysninger[5]);
+                if (oplysninger.length > 6) {
+                    indmeldelsesdato = LocalDate.parse(oplysninger[6]);
                 }
 
                 Member medlem = new Member(memberNumber, name, birthDate, aktivitet, svømmetype);
 
-                medlem.setKontingentBetalt(kontingentBetalt);
+                medlem.setKontingentBetalt(medlem.kontingentBetalt);
+                medlem.setIndmeldelsesdato(indmeldelsesdato);
 
                 medlemmer.add(medlem);
             }
