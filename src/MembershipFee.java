@@ -1,6 +1,6 @@
 public class MembershipFee {
     public int calculateFee(Member member){
-        if("Passiv".equals(member.getAktivitet())){
+        if("Passiv".equals(member.getAktivitet())){ //Udmelding
                 return 500;
         }
 
