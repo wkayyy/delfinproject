@@ -11,6 +11,8 @@ public class Member {
     boolean kontingentBetalt = false;
     String svømmetype;
     LocalDate indmeldelsesdato;
+    int antalfamiliemedlemmer;
+    int familiehovedmedlem;
 
     static int nextMemberNumber = 1;
 
@@ -24,6 +26,7 @@ public class Member {
         this.aktivitet = aktivitet;
         this.svømmetype = svømmetype;
         this.indmeldelsesdato = LocalDate.now();
+        this.familiehovedmedlem = 0;
     }
 
     // Indlæser et eksisterende medlem
@@ -42,6 +45,14 @@ public class Member {
 
     public int getMemberNumber() {
         return memberNumber;
+    }
+
+    public int getAntalfamiliemedlemmer() {
+        return antalfamiliemedlemmer;
+    }
+
+    public void setAntalfamiliemedlemmer(int antal) {
+        this.antalfamiliemedlemmer = antal;
     }
 
     public LocalDate getBirthDate() {
@@ -106,4 +117,26 @@ public class Member {
     public int getMedlemsAar() {
         return Period.between(indmeldelsesdato, LocalDate.now()).getYears();
     }
+
+    public void tilføjfamiliemedlem() {
+        antalfamiliemedlemmer++;
+    }
+
+    public void fjernfamiliemedlem() {
+     antalfamiliemedlemmer--;
+    }
+
+    public void setFamiliehovedmedlem(int familiehovedmedlem) {
+        this.familiehovedmedlem = familiehovedmedlem;
+
+    }
+
+    public void familieHovedmedlem() {
+        this.familiehovedmedlem = memberNumber;
+    }
+
+    public int getFamiliehovedmedlem() {
+        return familiehovedmedlem;
+    }
+
 }
