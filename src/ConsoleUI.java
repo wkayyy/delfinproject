@@ -15,7 +15,7 @@ public class ConsoleUI {
 
         IO.println("Hej og velkommen til svømmehallen");
 
-        // Testbrugere
+        // login koder til de forskellige ting
         loginSystem.addUser(new User(1, "formand", "1234", Role.FORMAND));
         loginSystem.addUser(new User(2, "kasserer", "1234", Role.KASSERER));
         loginSystem.addUser(new User(3, "træner", "1234", Role.TRÆNER));
@@ -30,28 +30,44 @@ public class ConsoleUI {
 
         while (loggedIn == null) {
 
-            IO.println("");
-            IO.println("===== DELFINEN LOGIN =====");
 
-            IO.print("Brugernavn: ");
+            IO.println("");
+            IO.println("╔══════════════════════════════════════════════╗");
+            IO.println("║                                              ║");
+            IO.println("║                 DELFINEN                     ║");
+            IO.println("║              ADMINISTRATION                  ║");
+            IO.println("║                                              ║");
+            IO.println("╠══════════════════════════════════════════════╣");
+            IO.println("║                                              ║");
+
+            IO.print("║  Brugernavn: ");
             String username = IO.readln();
 
-            IO.print("Adgangskode: ");
+            IO.print("║  Adgangskode: ");
             String password = IO.readln();
 
             loggedIn = loginSystem.login(username, password);
 
+            IO.println("║                                              ║");
+            IO.println("╚══════════════════════════════════════════════╝");
+
             if (loggedIn == null) {
-                IO.println("Forkert brugernavn eller adgangskode!");
-                IO.println("Prøv igen.");
+                IO.println("");
+                IO.println("  [!] FORKERT BRUGERNAVN ELLER ADGANGSKODE");
+                IO.println("  Prøv venligst igen.");
             }
         }
 
         IO.println("");
-        IO.println("Velkommen, " + loggedIn.getUsername());
-        IO.println("Din rolle: " + loggedIn.getRole());
+        IO.println("╔══════════════════════════════════════════════╗");
+        IO.println("║               LOGIN GODKENDT                 ║");
+        IO.println("╠══════════════════════════════════════════════╣");
+        IO.println("║  Velkommen," + loggedIn.getUsername() + "                           ║");
+        IO.println("║  Rolle:" + loggedIn.getRole() + "                               ║");
+        IO.println("╚══════════════════════════════════════════════╝");
 
         visRolleMenu(loggedIn);
+
 
     }
 
@@ -64,7 +80,7 @@ public class ConsoleUI {
             kassererMenu();
 
         } else if (user.getRole() == Role.TRÆNER) {
-            traenerMenu();
+            trænerMenu();
         }
     }
 
@@ -79,6 +95,7 @@ public class ConsoleUI {
             IO.println("1. Opret medlem");
             IO.println("2. Vis alle medlemmer");
             IO.println("3. Se forventet kontingentindtægt");
+            IO.println("4. Ret medlemsoplysninger");
             IO.println("0. Afslut");
             IO.print("Vælg: ");
 
@@ -93,13 +110,118 @@ public class ConsoleUI {
             } else if (valg.equals("3")) {
                 visForventetIndtaegt();
 
+            } else if (valg.equals("4")) {
+                retmedlemsoplysninger();
+
             } else if (!valg.equals("0")) {
                 IO.println("Ugyldigt valg!");
             }
         }
     }
 
-    public void kassererMenu() {
+        public void retmedlemsoplysninger() {
+
+            IO.println("");
+            IO.println("===== RET MEDLEMSOPLYSNINGER =====");
+
+            IO.print("Indtast medlemsnummer: ");
+            int medlemsnummer = Integer.parseInt(IO.readln());
+
+            Member valgtMedlem = null;
+
+            for (Member medlem : medlemmer) {
+                if (medlem.getMemberNumber() == medlemsnummer) {
+                    valgtMedlem = medlem;
+                }
+            }
+
+            if (valgtMedlem == null) {
+                IO.println("Medlemsnummeret findes ikke.");
+                return;
+            }
+
+            String valg = "";
+
+            while (!valg.equals("0")) {
+
+                IO.println("");
+                IO.println("Hvad vil du rette?");
+                IO.println("1. Navn");
+                IO.println("2. Fødselsdato");
+                IO.println("3. Aktivitet");
+                IO.println("4. Svømmetype");
+                IO.println("0. Tilbage");
+
+                IO.print("Vælg: ");
+                valg = IO.readln();
+
+                if (valg.equals("1")) {
+
+                    IO.print("Indtast nyt navn: ");
+                    valgtMedlem.setName(IO.readln());
+
+                } else if (valg.equals("2")) {
+
+                    IO.print("Indtast ny fødselsdato (ÅÅÅÅ-MM-DD): ");
+
+                    try {
+                        LocalDate nyDato = LocalDate.parse(IO.readln());
+
+                        if (nyDato.isAfter(LocalDate.now())) {
+                            IO.println("Datoen må ikke være i fremtiden.");
+                        } else {
+                            valgtMedlem.setBirthDate(nyDato);
+                        }
+
+                    } catch (DateTimeParseException e) {
+                        IO.println("Ugyldigt datoformat.");
+                    }
+
+                } else if (valg.equals("3")) {
+
+                    IO.println("1. Aktiv");
+                    IO.println("2. Passiv");
+                    IO.print("Vælg aktivitet: ");
+
+                    String aktivitetValg = IO.readln();
+
+                    if (aktivitetValg.equals("1")) {
+                        valgtMedlem.setAktivitet("Aktiv");
+                    } else if (aktivitetValg.equals("2")) {
+                        valgtMedlem.setAktivitet("Passiv");
+                        valgtMedlem.setSvømmetype("Ikke relevant");
+                    } else {
+                        IO.println("Ugyldigt valg.");
+                    }
+
+                } else if (valg.equals("4")) {
+
+                    IO.println("1. Motionist");
+                    IO.println("2. Konkurrencesvømmer");
+                    IO.print("Vælg svømmetype: ");
+
+                    String typeValg = IO.readln();
+
+                    if (typeValg.equals("1")) {
+                        valgtMedlem.setSvømmetype("Motionist");
+                    } else if (typeValg.equals("2")) {
+                        valgtMedlem.setSvømmetype("Konkurrencesvømmer");
+                    } else {
+                        IO.println("Ugyldigt valg.");
+                    }
+
+                } else if (!valg.equals("0")) {
+                    IO.println("Ugyldigt valg!");
+                }
+
+                memberFile.saveMembers(medlemmer);
+            }
+
+            IO.println("Medlemsoplysninger gemt.");
+        }
+
+
+    public void kassererMenu( ) {
 
         String valg = "";
 
@@ -133,7 +255,7 @@ public class ConsoleUI {
             }
         }
     }
-    public void traenerMenu() {
+    public void trænerMenu() {
 
         String valg = "";
 

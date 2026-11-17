@@ -76,4 +76,20 @@ public class Member {
     public void setKontingentBetalt(boolean kontingentBetalt) {
         this.kontingentBetalt = kontingentBetalt;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setAktivitet(String aktivitet) {
+        this.aktivitet = aktivitet;
+    }
+
+    public void setSvømmetype(String svømmetype) {
+        this.svømmetype = svømmetype;
+    }
 }
