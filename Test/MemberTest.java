@@ -39,19 +39,70 @@ class MemberTest {
     }
 
     @Test
-    void getAgeGroup() {
+    void testGetAgeGroupJunior() {
+        //Arrange
+        LocalDate juniorYear = LocalDate.now().minusYears(17);
+//        LocalDate seniorYear = LocalDate.now().minusYears(18);
 
+        Member member = new Member("Mathias", juniorYear, "Aktiv", "Motionist");
+
+        //Act
+        String result = member.getAgeGroup();
+
+        //Assert
+        assertEquals("Junior", result);
     }
 
     @Test
-    void getName() {
+    void testGetAgeGroupSenior(){
+        //Arrange
+        LocalDate seniorYear = LocalDate.now().minusYears(18);
+//        LocalDate juniorYear = LocalDate.now().minusYears(17);
+
+        Member member = new Member("Sarah", seniorYear, "Aktiv","Konkurrencesvømmer");
+
+        //Act
+        String result = member.getAgeGroup();
+
+        //Assert
+        assertEquals("Senior", result);
     }
 
     @Test
-    void getAktivitet() {
+    void testGetName() {
+        //Arrange
+        Member member = new Member("Sezer", LocalDate.of(2004, 6, 15), "Aktiv", "Motionist");
+
+        //Act
+        String result = member.getName();
+
+        //Assert
+        assertNotEquals("Sarah", result);
     }
 
     @Test
-    void getSvømmetype() {
+    void testGetAktivitet() {
+        //Arrange
+        LocalDate birthDate = LocalDate.of(2003, 1, 6);
+        Member member = new Member("Matthew", birthDate, "Aktiv", "Motionist");
+
+        //Act
+        String result = member.getAktivitet();
+
+        //Assert
+        assertEquals("Aktiv",result);
+    }
+
+    @Test
+    void testGetSvømmetype() {
+        //Arrange
+        LocalDate birthDate = LocalDate.of(2003, 1, 6);
+        Member member = new Member("Matthew", birthDate, "Aktiv", "Motionist");
+
+        //Act
+        String result = member.getSvømmetype();
+
+        //Assert
+        assertNotEquals("Konkurrencesvømmer", result);
     }
 }
