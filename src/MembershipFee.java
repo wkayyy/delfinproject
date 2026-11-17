@@ -6,6 +6,13 @@ public class MembershipFee {
 
         int age = member.getAge(); //Henter alder fra member
 
+
+        int familiepris = member.getFamiliehovedmedlem();
+
+        if (familiepris >= 2) {
+            return 800;
+        }
+
         if (age < 18){
             return 1000;
         } else if (age > 60) {
@@ -13,5 +20,8 @@ public class MembershipFee {
         } else {
             return 1600;
         }
+
     }
+
+
 }
