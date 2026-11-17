@@ -119,109 +119,198 @@ public class ConsoleUI {
         }
     }
 
-        public void retmedlemsoplysninger() {
+    public void retmedlemsoplysninger() {
 
-            IO.println("");
-            IO.println("===== RET MEDLEMSOPLYSNINGER =====");
+        IO.println("");
+        IO.println("===== RET MEDLEMSOPLYSNINGER =====");
 
-            IO.print("Indtast medlemsnummer: ");
-            int medlemsnummer = Integer.parseInt(IO.readln());
+        IO.print("Indtast medlemsnummer: ");
+        int medlemsnummer = Integer.parseInt(IO.readln());
 
-            Member valgtMedlem = null;
+        Member valgtMedlem = null;
 
-            for (Member medlem : medlemmer) {
-                if (medlem.getMemberNumber() == medlemsnummer) {
-                    valgtMedlem = medlem;
-                }
+        for (Member medlem : medlemmer) {
+            if (medlem.getMemberNumber() == medlemsnummer) {
+                valgtMedlem = medlem;
+                break;
             }
-
-            if (valgtMedlem == null) {
-                IO.println("Medlemsnummeret findes ikke.");
-                return;
-            }
-
-            String valg = "";
-
-            while (!valg.equals("0")) {
-
-                IO.println("");
-                IO.println("Hvad vil du rette?");
-                IO.println("1. Navn");
-                IO.println("2. Fødselsdato");
-                IO.println("3. Aktivitet");
-                IO.println("4. Svømmetype");
-                IO.println("0. Tilbage");
-
-                IO.print("Vælg: ");
-                valg = IO.readln();
-
-                if (valg.equals("1")) {
-
-                    IO.print("Indtast nyt navn: ");
-                    valgtMedlem.setName(IO.readln());
-
-                } else if (valg.equals("2")) {
-
-                    IO.print("Indtast ny fødselsdato (ÅÅÅÅ-MM-DD): ");
-
-                    try {
-                        LocalDate nyDato = LocalDate.parse(IO.readln());
-
-                        if (nyDato.isAfter(LocalDate.now())) {
-                            IO.println("Datoen må ikke være i fremtiden.");
-                        } else {
-                            valgtMedlem.setBirthDate(nyDato);
-                        }
-
-                    } catch (DateTimeParseException e) {
-                        IO.println("Ugyldigt datoformat.");
-                    }
-
-                } else if (valg.equals("3")) {
-
-                    IO.println("1. Aktiv");
-                    IO.println("2. Passiv");
-                    IO.print("Vælg aktivitet: ");
-
-                    String aktivitetValg = IO.readln();
-
-                    if (aktivitetValg.equals("1")) {
-                        valgtMedlem.setAktivitet("Aktiv");
-                    } else if (aktivitetValg.equals("2")) {
-                        valgtMedlem.setAktivitet("Passiv");
-                        valgtMedlem.setSvømmetype("Ikke relevant");
-                    } else {
-                        IO.println("Ugyldigt valg.");
-                    }
-
-                } else if (valg.equals("4")) {
-
-                    IO.println("1. Motionist");
-                    IO.println("2. Konkurrencesvømmer");
-                    IO.print("Vælg svømmetype: ");
-
-                    String typeValg = IO.readln();
-
-                    if (typeValg.equals("1")) {
-                        valgtMedlem.setSvømmetype("Motionist");
-                    } else if (typeValg.equals("2")) {
-                        valgtMedlem.setSvømmetype("Konkurrencesvømmer");
-                    } else {
-                        IO.println("Ugyldigt valg.");
-                    }
-
-                } else if (!valg.equals("0")) {
-                    IO.println("Ugyldigt valg!");
-                }
-
-                memberFile.saveMembers(medlemmer);
-            }
-
-            IO.println("Medlemsoplysninger gemt.");
         }
 
+        if (valgtMedlem == null) {
+            IO.println("Medlemsnummeret findes ikke.");
+            return;
+        }
 
-    public void kassererMenu( ) {
+        String valg = "";
+
+        while (!valg.equals("0")) {
+
+            IO.println("");
+            IO.println("Hvad vil du rette?");
+            IO.println("1. Navn");
+            IO.println("2. Fødselsdato");
+            IO.println("3. Aktivitet");
+            IO.println("4. Svømmetype");
+            IO.println("5. Familie");
+            IO.println("0. Tilbage");
+
+            IO.print("Vælg: ");
+            valg = IO.readln();
+
+            if (valg.equals("1")) {
+
+                IO.print("Indtast nyt navn: ");
+                valgtMedlem.setName(IO.readln());
+
+            } else if (valg.equals("2")) {
+
+                IO.print("Indtast ny fødselsdato (ÅÅÅÅ-MM-DD): ");
+
+                try {
+                    LocalDate nyDato = LocalDate.parse(IO.readln());
+
+                    if (nyDato.isAfter(LocalDate.now())) {
+                        IO.println("Datoen må ikke være i fremtiden.");
+                    } else {
+                        valgtMedlem.setBirthDate(nyDato);
+                    }
+
+                } catch (DateTimeParseException e) {
+                    IO.println("Ugyldigt datoformat.");
+                }
+
+            } else if (valg.equals("3")) {
+
+                IO.println("1. Aktiv");
+                IO.println("2. Passiv");
+                IO.print("Vælg aktivitet: ");
+
+                String aktivitetValg = IO.readln();
+
+                if (aktivitetValg.equals("1")) {
+                    valgtMedlem.setAktivitet("Aktiv");
+
+                } else if (aktivitetValg.equals("2")) {
+                    valgtMedlem.setAktivitet("Passiv");
+                    valgtMedlem.setSvømmetype("Ikke relevant");
+
+                } else {
+                    IO.println("Ugyldigt valg.");
+                }
+
+            } else if (valg.equals("4")) {
+
+                IO.println("1. Motionist");
+                IO.println("2. Konkurrencesvømmer");
+                IO.print("Vælg svømmetype: ");
+
+                String typeValg = IO.readln();
+
+                if (typeValg.equals("1")) {
+                    valgtMedlem.setSvømmetype("Motionist");
+
+                } else if (typeValg.equals("2")) {
+                    valgtMedlem.setSvømmetype("Konkurrencesvømmer");
+
+                } else {
+                    IO.println("Ugyldigt valg.");
+                }
+
+            } else if (valg.equals("5")) {
+
+                IO.println("");
+                IO.println("===== FAMILIE =====");
+                IO.println("1. Gør medlem til hovedmedlem");
+                IO.println("2. Tilføj familiemedlem");
+                IO.println("3. Fjern familiemedlem");
+                IO.println("0. Tilbage");
+                IO.print("Vælg: ");
+
+                String familieValg = IO.readln();
+
+                if (familieValg.equals("1")) {
+
+                    valgtMedlem.setFamiliehovedmedlem(valgtMedlem.getMemberNumber());
+
+                    IO.println("Medlemmet er nu hovedmedlem.");
+
+                } else if (familieValg.equals("2")) {
+
+                    IO.print("Indtast medlemsnummer på familiemedlemmet: ");
+                    int familieNummer = Integer.parseInt(IO.readln());
+
+                    Member familieMedlem = null;
+
+                    for (Member medlem : medlemmer) {
+                        if (medlem.getMemberNumber() == familieNummer) {
+                            familieMedlem = medlem;
+                            break;
+                        }
+                    }
+
+                    if (familieMedlem == null) {
+                        IO.println("Medlemsnummeret findes ikke.");
+
+                    } else if (familieMedlem.getMemberNumber() == valgtMedlem.getMemberNumber()) {
+                        IO.println("Et medlem kan ikke tilføje sig selv.");
+
+                    } else {
+
+                        int hovedmedlemNummer = valgtMedlem.getFamiliehovedmedlem();
+
+                        if (hovedmedlemNummer == 0) {
+                            hovedmedlemNummer = valgtMedlem.getMemberNumber();
+                        }
+
+                        familieMedlem.setFamiliehovedmedlem(hovedmedlemNummer);
+
+                        IO.println("Familiemedlemmet er tilføjet.");
+                    }
+
+                } else if (familieValg.equals("3")) {
+
+                    IO.print("Indtast medlemsnummer på familiemedlemmet, der skal fjernes: ");
+                    int familieNummer = Integer.parseInt(IO.readln());
+
+                    Member familieMedlem = null;
+
+                    for (Member medlem : medlemmer) {
+                        if (medlem.getMemberNumber() == familieNummer) {
+                            familieMedlem = medlem;
+                            break;
+                        }
+                    }
+
+                    if (familieMedlem == null) {
+                        IO.println("Medlemsnummeret findes ikke.");
+
+                    } else if (familieMedlem.getMemberNumber() == familieMedlem.getFamiliehovedmedlem()) {
+                        IO.println("Hovedmedlemmet kan ikke fjernes på denne måde.");
+
+                    } else if (familieMedlem.getFamiliehovedmedlem() == 0) {
+                        IO.println("Medlemmet er ikke en del af en familie.");
+
+                    } else {
+                        familieMedlem.setFamiliehovedmedlem(0);
+                        IO.println("Familiemedlemmet er fjernet.");
+                    }
+
+                } else if (!familieValg.equals("0")) {
+                    IO.println("Ugyldigt valg.");
+                }
+
+            } else if (!valg.equals("0")) {
+                IO.println("Ugyldigt valg!");
+            }
+
+            memberFile.saveMembers(medlemmer);
+        }
+
+        IO.println("Medlemsoplysninger gemt.");
+    }
+
+
+    public void kassererMenu() {
 
         String valg = "";
 
@@ -480,6 +569,11 @@ public class ConsoleUI {
                 IO.println("Navn: " + medlem.getName());
                 IO.println("Medlem siden: " + medlem.getIndmeldelsesdato());
                 IO.println("Medlemsanciennitet: " + medlem.getMedlemsAar() + " år");
+                if (medlem.getFamiliehovedmedlem() != 0) {
+                    IO.println("Familie: Ja");
+                } else {
+                    IO.println("Familie: Nej");
+                }
                 IO.println("Fødselsdato: " + medlem.getBirthDate());
                 IO.println("Alder: " + medlem.getAge());
                 IO.println("Aldersgruppe: " + medlem.getAgeGroup());
