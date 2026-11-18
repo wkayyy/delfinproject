@@ -8,17 +8,19 @@ public class ConsoleUI {
     LoginSystem loginSystem = new LoginSystem();
     MemberFile memberFile = new MemberFile();
     MembershipFee membershipFee = new MembershipFee();
-
     ArrayList<Member> medlemmer = memberFile.loadMembers();
+    TrainingResultFile resultFile = new TrainingResultFile();
 
     public void start() {
+
+        resultFile.loadResults(medlemmer);
 
         IO.println("Hej og velkommen til svømmehallen");
 
         // login koder til de forskellige ting
         loginSystem.addUser(new User(1, "formand", "1234", Role.FORMAND));
         loginSystem.addUser(new User(2, "kasserer", "1234", Role.KASSERER));
-        loginSystem.addUser(new User(3, "træner", "1234", Role.TRÆNER));
+        loginSystem.addUser(new User(3, "traener", "1234", Role.TRÆNER));
 
         login();
 
@@ -354,6 +356,8 @@ public class ConsoleUI {
             IO.println("===== TRÆNERENS MENU =====");
             IO.println("1. Tilknyt konkurrencesvømmer");
             IO.println("2. Se mine svømmere");
+            IO.println("3. Registrer træningsresultat");
+            IO.println("4. Se bedste træningstider");
             IO.println("0. Afslut");
             IO.print("Vælg: ");
 
@@ -364,6 +368,12 @@ public class ConsoleUI {
 
             } else if (valg.equals("2")) {
                 visMineSvømmere(træner);
+
+            } else if (valg.equals("3")) {
+                registrerTræningsresultat();
+
+            } else if (valg.equals("4")) {
+                visBedsteTider();
 
             } else if (!valg.equals("0")) {
                 IO.println("Ugyldigt valg!");
@@ -450,6 +460,141 @@ public class ConsoleUI {
             IO.println("Ingen svømmere.");
         }
     }
+
+    private Member vælgKonkurrencesvømmer() {
+
+        IO.print("Indtast medlemsnummer: ");
+
+        int medlemsnummer;
+
+        try {
+            medlemsnummer = Integer.parseInt(IO.readln());
+        } catch (NumberFormatException e) {
+            IO.println("Medlemsnummer skal være et tal.");
+            return null;
+        }
+
+        for (Member medlem : medlemmer) {
+            if (medlem.getMemberNumber() == medlemsnummer) {
+
+                if (!medlem.erKonkurrencesvømmer()) {
+                    IO.println("Medlemmet er ikke konkurrencesvømmer.");
+                    return null;
+                }
+
+                return medlem;
+            }
+        }
+
+        IO.println("Medlemsnummeret findes ikke.");
+        return null;
+    }
+
+    public void registrerTræningsresultat() {
+
+        IO.println("");
+        IO.println("===== REGISTRER TRÆNINGSRESULTAT =====");
+
+        Member svømmer = vælgKonkurrencesvømmer();
+
+        if (svømmer == null) {
+            return;
+        }
+
+        Discipliner[] discipliner = Discipliner.values();
+
+        IO.println("Vælg disciplin:");
+        for (int i = 0; i < discipliner.length; i++) {
+            IO.println((i + 1) + ". " + discipliner[i]);
+        }
+        IO.print("Vælg: ");
+
+        int disciplinValg;
+
+        try {
+            disciplinValg = Integer.parseInt(IO.readln());
+        } catch (NumberFormatException e) {
+            IO.println("Ugyldigt valg.");
+            return;
+        }
+
+        if (disciplinValg < 1 || disciplinValg > discipliner.length) {
+            IO.println("Ugyldigt valg.");
+            return;
+        }
+
+        Discipliner disciplin = discipliner[disciplinValg - 1];
+
+        IO.print("Indtast tid i sekunder (fx 58.4): ");
+
+        double tid;
+
+        try {
+            tid = Double.parseDouble(IO.readln().replace(",", "."));
+        } catch (NumberFormatException e) {
+            IO.println("Ugyldig tid.");
+            return;
+        }
+
+        if (Double.isNaN(tid) || Double.isInfinite(tid) || tid <= 0) {
+            IO.println("Tiden skal være større end 0.");
+            return;
+        }
+
+        IO.print("Indtast dato (ÅÅÅÅ-MM-DD): ");
+
+        LocalDate dato;
+
+        try {
+            dato = LocalDate.parse(IO.readln());
+        } catch (DateTimeParseException e) {
+            IO.println("Ugyldig dato.");
+            return;
+        }
+
+        if (dato.isAfter(LocalDate.now())) {
+            IO.println("Datoen må ikke være i fremtiden.");
+            return;
+        }
+
+        TrainingResult tidligereBedste = svømmer.getBestResult(disciplin);
+
+        svømmer.addTrainingResult(new TrainingResult(disciplin, tid, dato));
+        resultFile.saveResults(medlemmer);
+
+        IO.println("Resultat registreret for " + svømmer.getName() + ".");
+
+        if (tidligereBedste == null || tid < tidligereBedste.getTidISekunder()) {
+            IO.println("Ny bedste tid i " + disciplin + "!");
+        }
+    }
+
+    public void visBedsteTider() {
+
+        IO.println("");
+        IO.println("===== BEDSTE TRÆNINGSTIDER =====");
+
+        Member svømmer = vælgKonkurrencesvømmer();
+
+        if (svømmer == null) {
+            return;
+        }
+
+        IO.println("Svømmer: " + svømmer.getName());
+
+        for (Discipliner disciplin : Discipliner.values()) {
+
+            TrainingResult bedste = svømmer.getBestResult(disciplin);
+
+            if (bedste == null) {
+                IO.println(disciplin + ": ingen resultater endnu");
+            } else {
+                IO.println(disciplin + ": " + bedste.getTidISekunder()
+                        + " sek. (" + bedste.getDato() + ")");
+            }
+        }
+    }
+
     public void visRestancer() {
 
         IO.println("");

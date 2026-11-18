@@ -1,6 +1,7 @@
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 
 public class Member {
 
@@ -14,6 +15,7 @@ public class Member {
     int antalfamiliemedlemmer;
     int familiehovedmedlem;
     int trainerId;
+    ArrayList<TrainingResult> trainingResults = new ArrayList<>();
 
     static int nextMemberNumber = 1;
 
@@ -149,6 +151,26 @@ public class Member {
 
     public boolean erKonkurrencesvømmer() {
         return "Aktiv".equals(aktivitet) && "Konkurrencesvømmer".equals(svømmetype);
+    }
+    public ArrayList<TrainingResult> getTrainingResults() {
+        return trainingResults;
+    }
+
+    public void addTrainingResult(TrainingResult resultat) {
+        trainingResults.add(resultat);
+    }
+
+    public TrainingResult getBestResult(Discipliner discipline) {
+        TrainingResult best = null;
+
+        for (TrainingResult resultat : trainingResults) {
+            if (resultat.getDiscipline() == discipline
+                    && (best == null || resultat.getTidISekunder() < best.getTidISekunder())) {
+                best = resultat;
+            }
+        }
+
+        return best;
     }
 
 }
