@@ -22,7 +22,8 @@ public class MemberFile {
                                 medlem.getSvømmetype() + ";" +
                                 medlem.isKontingentBetalt() + ";" +
                                 medlem.getIndmeldelsesdato() + ";"+
-                                medlem.getFamiliehovedmedlem()+"\n"
+                                medlem.getFamiliehovedmedlem() + ";" +
+                                medlem.getTrainerId() + "\n"
                 );
             }
 
@@ -63,6 +64,8 @@ public class MemberFile {
                 String svømmetype = oplysninger[4];
                 LocalDate indmeldelsesdato = LocalDate.now();
                 int familieHovedmedlem = 0;
+                int trainerId = 0;
+                boolean kontingentBetalt = false;
 
                 if (oplysninger.length > 6) {
                     indmeldelsesdato = LocalDate.parse(oplysninger[6]);
@@ -71,15 +74,24 @@ public class MemberFile {
                 if (oplysninger.length > 7) {
                     familieHovedmedlem = Integer.parseInt(oplysninger[7]);
                 }
+                if (oplysninger.length > 5) {
+                    kontingentBetalt = Boolean.parseBoolean(oplysninger[5]);
+                }
+
+                if (oplysninger.length > 8) {
+                    trainerId = Integer.parseInt(oplysninger[8]);
+                }
 
                 Member medlem = new Member(memberNumber, name, birthDate, aktivitet, svømmetype);
 
-                medlem.setKontingentBetalt(medlem.kontingentBetalt);
+                medlem.setKontingentBetalt(kontingentBetalt);
                 medlem.setIndmeldelsesdato(indmeldelsesdato);
                 medlem.setFamiliehovedmedlem(familieHovedmedlem);
+                medlem.setTrainerId(trainerId);
 
                 medlemmer.add(medlem);
             }
+
 
             scanner.close();
 

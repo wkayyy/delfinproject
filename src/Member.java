@@ -13,6 +13,7 @@ public class Member {
     LocalDate indmeldelsesdato;
     int antalfamiliemedlemmer;
     int familiehovedmedlem;
+    int trainerId;
 
     static int nextMemberNumber = 1;
 
@@ -137,6 +138,17 @@ public class Member {
 
     public int getFamiliehovedmedlem() {
         return familiehovedmedlem;
+    }
+    public int getTrainerId() {
+        return trainerId;
+    }
+
+    public void setTrainerId(int trainerId) {
+        this.trainerId = trainerId;
+    }
+
+    public boolean erKonkurrencesvømmer() {
+        return "Aktiv".equals(aktivitet) && "Konkurrencesvømmer".equals(svømmetype);
     }
 
 }

@@ -80,7 +80,7 @@ public class ConsoleUI {
             kassererMenu();
 
         } else if (user.getRole() == Role.TRÆNER) {
-            trænerMenu();
+            trænerMenu(user);
         }
     }
 
@@ -344,7 +344,7 @@ public class ConsoleUI {
             }
         }
     }
-    public void trænerMenu() {
+    public void trænerMenu(User træner) {
 
         String valg = "";
 
@@ -352,14 +352,18 @@ public class ConsoleUI {
 
             IO.println("");
             IO.println("===== TRÆNERENS MENU =====");
-            IO.println("1. Se mine hold");
+            IO.println("1. Tilknyt konkurrencesvømmer");
+            IO.println("2. Se mine svømmere");
             IO.println("0. Afslut");
             IO.print("Vælg: ");
 
             valg = IO.readln();
 
             if (valg.equals("1")) {
-                IO.println("Holdoversigten bliver snart tilføjet.");
+                tilknytSvømmer(træner);
+
+            } else if (valg.equals("2")) {
+                visMineSvømmere(træner);
 
             } else if (!valg.equals("0")) {
                 IO.println("Ugyldigt valg!");
@@ -367,6 +371,85 @@ public class ConsoleUI {
         }
     }
 
+    public void tilknytSvømmer(User træner) {
+
+        IO.println("");
+        IO.println("===== TILKNYT KONKURRENCESVØMMER =====");
+        IO.print("Indtast medlemsnummer: ");
+
+        int medlemsnummer;
+
+        try {
+            medlemsnummer = Integer.parseInt(IO.readln());
+        } catch (NumberFormatException e) {
+            IO.println("Medlemsnummer skal være et tal.");
+            return;
+        }
+
+        Member valgt = null;
+
+        for (Member medlem : medlemmer) {
+            if (medlem.getMemberNumber() == medlemsnummer) {
+                valgt = medlem;
+                break;
+            }
+        }
+
+        if (valgt == null) {
+            IO.println("Medlemsnummeret findes ikke.");
+            return;
+        }
+
+        if (!valgt.erKonkurrencesvømmer()) {
+            IO.println("Kun konkurrencesvømmere kan tilknyttes en træner.");
+            return;
+        }
+
+        if (valgt.getTrainerId() == træner.getUserId()) {
+            IO.println("Svømmeren er allerede tilknyttet dig.");
+            return;
+        }
+
+        if (valgt.getTrainerId() != 0) {
+            IO.println("Svømmeren har allerede en anden træner.");
+            return;
+        }
+
+        valgt.setTrainerId(træner.getUserId());
+        memberFile.saveMembers(medlemmer);
+
+        IO.println(valgt.getName() + " er nu tilknyttet dig.");
+    }
+
+    public void visMineSvømmere(User træner) {
+
+        IO.println("");
+        IO.println("===== MINE SVØMMERE =====");
+
+        visSvømmereIGruppe(træner, "Junior", "under 18 år");
+        visSvømmereIGruppe(træner, "Senior", "fra 18 år");
+    }
+
+    private void visSvømmereIGruppe(User træner, String aldersgruppe, String beskrivelse) {
+
+        IO.println("");
+        IO.println("--- " + aldersgruppe + " (" + beskrivelse + ") ---");
+
+        boolean fundet = false;
+
+        for (Member medlem : medlemmer) {
+            if (medlem.getTrainerId() == træner.getUserId()
+                    && medlem.getAgeGroup().equals(aldersgruppe)) {
+
+                IO.println(medlem.getMemberNumber() + " - " + medlem.getName());
+                fundet = true;
+            }
+        }
+
+        if (!fundet) {
+            IO.println("Ingen svømmere.");
+        }
+    }
     public void visRestancer() {
 
         IO.println("");
